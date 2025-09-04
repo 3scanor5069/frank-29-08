@@ -1,0 +1,64 @@
+/* src/styles/FeaturedMenu.css */
+
+.featured-menu {
+    padding: 60px 20px;
+    background-color: #fafafa;
+    text-align: center;
+  }
+  
+  .featured-menu h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #111;
+  }
+  
+  .menu-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .menu-card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .menu-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .menu-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .menu-info {
+    padding: 20px;
+  }
+  
+  .menu-info h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .menu-info p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    display: inline-block;
+    background-color: #ffffff;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  

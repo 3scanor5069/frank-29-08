@@ -1,0 +1,700 @@
+/* Header.css - Estilo Epic Games para Frank Furt */
+
+/* Fuentes elegantes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Variables de colores */
+:root {
+  --gold-primary: #FFD700;
+  --burgundy-primary: #800020;
+  --burgundy-dark: #2b0f14;
+  --white-warm: #fff9e6;
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-dropdown: 0 8px 32px rgba(43, 15, 20, 0.3);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Header base styles */
+.header {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: var(--transition-smooth);
+}
+
+/* Header cuando el usuario está autenticado */
+.header-authenticated {
+  background: linear-gradient(135deg, #ffffff 0%, var(--white-warm) 100%);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* Contact bar ajustes */
+.contact-bar {
+  background: linear-gradient(135deg, var(--primary-burgundy) 0%, var(--secondary-burgundy) 100%);
+  color: var(--white);
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.contact-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.9;
+  flex-wrap: nowrap;
+  transition: var(--transition-fast);
+}
+.contact-item span{
+  white-space: nowrap;
+}
+
+.contact-item:hover {
+  opacity: 1;
+}
+
+.contact-icon {
+  color: var(--accent-gold);
+  font-size: 12px;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.social-text {
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--white);
+  text-decoration: none;
+  transition: var(--transition-fast);
+  backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+  background: var(--accent-gold);
+  color: var(--primary-burgundy);
+  transform: translateY(-2px);
+}
+
+
+/* Main navigation */
+.main-nav {
+  position: relative;
+  z-index: 100;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+/* Brand section */
+.brand {
+  flex: 0 0 auto;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--burgundy-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navigation menu styles */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link:hover {
+  color: var(--burgundy-primary);
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Active link with animated underline */
+.nav-link.active {
+  color: var(--burgundy-primary);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-primary) 0%, var(--burgundy-primary) 100%);
+  border-radius: 2px;
+  animation: expandUnderline 0.5s ease-out forwards;
+}
+
+@keyframes expandUnderline {
+  to {
+    width: 80%;
+  }
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(43, 15, 20, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  padding: 0.5rem 0;
+  min-width: 180px;
+  box-shadow: var(--shadow-dropdown);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: var(--transition-smooth);
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.25rem;
+  font-weight: 400;
+  transition: var(--transition-smooth);
+}
+
+.dropdown-menu a:hover {
+  color: var(--gold-primary);
+  background: rgba(255, 215, 0, 0.1);
+  transform: scale(1.05);
+}
+
+/* Cart button */
+.cart-btn {
+  position: relative;
+  background: rgba(128, 0, 32, 0.1);
+  border: 2px solid var(--burgundy-primary);
+  border-radius: 12px;
+  padding: 0.75rem;
+  color: var(--burgundy-primary);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  margin-right: 1rem;
+}
+
+.cart-btn:hover {
+  background: var(--burgundy-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--gold-primary);
+  color: var(--burgundy-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Epic Games inspired authenticated user section */
+.user-authenticated.epic-style {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Avatar principal con animación de aparición */
+.user-avatar-epic {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--burgundy-primary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Animación de aparición suave */
+.user-authenticated.epic-style:not(.visible) .user-avatar-epic {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.user-authenticated.epic-style.visible .user-avatar-epic {
+  opacity: 1;
+  transform: scale(1);
+  animation: avatarAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes avatarAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Ring animado alrededor del avatar */
+.avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--gold-primary), var(--burgundy-primary), var(--gold-primary));
+  opacity: 0;
+  transition: var(--transition-smooth);
+  z-index: -1;
+}
+
+.user-avatar-epic:hover .avatar-ring {
+  opacity: 1;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Contenido del avatar */
+.avatar-content {
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  z-index: 2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Indicador de estado */
+.user-status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: #00ff88;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Hover effect en el avatar */
+.user-avatar-epic:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
+}
+
+/* Menú desplegable Epic Games style */
+.user-epic-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: rgba(43, 15, 20, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  min-width: 280px;
+  box-shadow: 0 20px 60px rgba(43, 15, 20, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px) scale(0.95);
+  transition: var(--transition-smooth);
+  z-index: 1000;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.user-authenticated.epic-style:hover .user-epic-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Header del dropdown */
+.dropdown-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user-email {
+  color: rgba(255, 215, 0, 0.8);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* Divider */
+.dropdown-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  margin: 0.5rem 0;
+}
+
+/* Items del dropdown */
+.dropdown-items {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.dropdown-items li {
+  margin: 0;
+}
+
+.dropdown-items a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  border-radius: 8px;
+  margin: 0 0.5rem;
+}
+
+.dropdown-items a:hover {
+  color: var(--gold-primary);
+  background: rgba(255, 215, 0, 0.1);
+  transform: scale(1.02) translateX(4px);
+}
+
+/* Footer del dropdown */
+.dropdown-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.logout-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--burgundy-primary) 0%, #5d0015 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #5d0015 0%, var(--burgundy-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+}
+
+/* Mobile styles */
+.mobile-toggle {
+  background: none;
+  border: 2px solid var(--burgundy-primary);
+  color: var(--burgundy-primary);
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.mobile-toggle:hover {
+  background: var(--burgundy-primary);
+  color: white;
+}
+
+/* Mobile overlay y menú */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 320px;
+  background: rgba(43, 15, 20, 0.98);
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+  transform: translateX(100%);
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  to { transform: translateX(0); }
+}
+
+.mobile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.mobile-header h3 {
+  color: white;
+  margin: 0;
+  font-weight: 600;
+}
+
+.mobile-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.mobile-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav li {
+  margin-bottom: 0.5rem;
+}
+
+.mobile-nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+}
+
+.mobile-nav a:hover {
+  color: var(--gold-primary);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Mobile actions */
+.mobile-actions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.mobile-user-info.epic-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.mobile-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--burgundy-primary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+
+.mobile-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: var(--transition-smooth);
+  border: 2px solid transparent;
+  font-weight: 500;
+}
+
+.mobile-btn.logout-mobile {
+  background: var(--burgundy-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-btn.logout-mobile:hover {
+  background: #5d0015;
+  transform: translateY(-1px);
+}
+
+.mobile-btn.primary {
+  background: var(--gold-primary);
+  color: var(--burgundy-primary);
+  font-weight: 600;
+}
+
+.mobile-btn.primary:hover {
+  background: #ffed4e;
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-wrapper {
+    display: none;
+  }
+  
+  .user-epic-dropdown {
+    right: -100px;
+    min-width: 250px;
+  }
+  
+  .user-avatar-epic {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .avatar-content {
+    font-size: 1rem;
+  }
+}
+
+/* Container base */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Nav actions container */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Logo container adjustments */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-icon .icon {
+  color: var(--gold-primary);
+  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+}
+
+/* Brand subtitle */
+.brand-subtitle {
+  color: var(--burgundy-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

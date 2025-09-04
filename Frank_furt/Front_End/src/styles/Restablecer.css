@@ -1,0 +1,351 @@
+/* Restablecer.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.recovery-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4c430 0%, #e6b800 50%, #d4a617 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.recovery-container {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recovery-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 35px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.recovery-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #f4c430, #e6b800);
+  border-radius: 22px;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+.recovery-header {
+  margin-bottom: 35px;
+}
+
+.crown-logo {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #b91c4c, #9c1c3f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  box-shadow: 0 10px 20px rgba(185, 28, 76, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.crown-logo:hover {
+  transform: translateY(-2px);
+}
+
+.crown-logo svg {
+  color: #f4c430;
+  width: 35px;
+  height: 35px;
+}
+
+.recovery-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #b91c4c;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.recovery-header p {
+  color: #6b7280;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.recovery-form {
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: #b91c4c;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+  color: #374151;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #b91c4c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(185, 28, 76, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-group input::placeholder {
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+.recovery-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #b91c4c, #9c1c3f);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(185, 28, 76, 0.3);
+}
+
+.recovery-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9c1c3f, #7f1632);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(185, 28, 76, 0.4);
+}
+
+.recovery-btn:active {
+  transform: translateY(0);
+}
+
+.recovery-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.recovery-footer {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.recovery-footer p {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.recovery-footer a {
+  color: #b91c4c;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.recovery-footer a:hover {
+  color: #9c1c3f;
+  text-decoration: underline;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #b91c4c;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.link-btn:hover {
+  color: #9c1c3f;
+  text-decoration: underline;
+}
+
+/* Success Card Styles */
+.success-card {
+  background: linear-gradient(135deg, #f0fdf4, #ffffff);
+  border: 2px solid #dcfce7;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+}
+
+.success-icon svg {
+  color: white;
+  width: 35px;
+  height: 35px;
+}
+
+.success-card h1 {
+  color: #16a34a;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .recovery-page {
+    padding: 15px;
+  }
+  
+  .recovery-card {
+    padding: 30px 25px;
+    border-radius: 16px;
+  }
+  
+  .recovery-header h1 {
+    font-size: 24px;
+  }
+  
+  .recovery-header p {
+    font-size: 15px;
+  }
+  
+  .crown-logo,
+  .success-icon {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .crown-logo svg,
+  .success-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .input-group input {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  
+  .recovery-btn {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .recovery-card {
+    padding: 25px 20px;
+  }
+  
+  .recovery-header h1 {
+    font-size: 22px;
+  }
+}
+
+/* Animation Effects */
+.recovery-card {
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.crown-logo,
+.success-icon {
+  animation: bounceIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
