@@ -23,7 +23,7 @@ import EditarPerfil from './components/Editarperfil';
 import SeleccionMesas from './pages/SeleccionMesas';
 import RegistroOrden from './pages/RegistroOrden';
 import DashboardBar from './components/DashboardBar';
-import RestaurantOrders from './Administrador/RestaurantOrders';
+import ManualSale from './Administrador/ManualSale';
 import InventoryHistory from './Administrador/InventoryHistory';
 
 
@@ -57,7 +57,7 @@ function App() {
           <Route path="/SeleccionMesas" element={<SeleccionMesas />} />
           <Route path="/RegistroOrden" element={<RegistroOrden />} />
           <Route path="/DashboardBar" element={<DashboardBar />} />
-          <Route path="/RestaurantOrders" element={<RestaurantOrders />} />
+          <Route path="/ManualSale" element={<ManualSale />} />
           <Route path="/InventoryHistory" element={<InventoryHistory />} />
 
 

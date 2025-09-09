@@ -153,7 +153,7 @@ const Dashboard = () => {
   const menuItems = [
     { icon: Home, label: 'Dashboard', active: true, path: '/dashboard' },
     { icon: Users, label: 'Usuarios', path: '/UsersCrud' },
-    { icon: ShoppingCart, label: 'Pedidos', path: '/restaurantOrders' },
+    { icon: ShoppingCart, label: 'Pedidos', path: '/ManualSale' },
     { icon: UtensilsCrossed, label: 'Menú', path: '/MenuCrud' },
     { icon: Package, label: 'Inventario', path: '/InventoryCrud' },
     { icon: History, label: 'Historial de inventario', path: '/History' },
