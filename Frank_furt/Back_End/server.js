@@ -4,10 +4,11 @@ require('dotenv').config(); // << CARGAR VARIABLES .ENV
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const passwordRoutes = require('./routes/passwordRoutes'); // << NUEVO
+const passwordRoutes = require('./routes/passwordRoutes'); 
 const menuRoutes = require('./routes/menuRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const inventoryHistoryRoutes = require('./routes/inventoryHistoryRoutes');
 
 
 
@@ -26,6 +27,7 @@ app.use('/api', passwordRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/inventario', inventoryHistoryRoutes);
 
 
 

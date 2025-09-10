@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Users, ShoppingCart, DollarSign, TrendingUp, Menu, X, Home, Package, FileText, Settings, LogOut, Bell, UtensilsCrossed, History } from 'lucide-react';
+import { Users, ShoppingCart, DollarSign, TrendingUp, Menu, X, Home, Package, FileText, Settings, Bell, UtensilsCrossed, History } from 'lucide-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './dashboard.css';
 
@@ -156,7 +156,7 @@ const Dashboard = () => {
     { icon: ShoppingCart, label: 'Pedidos', path: '/ManualSale' },
     { icon: UtensilsCrossed, label: 'Menú', path: '/MenuCrud' },
     { icon: Package, label: 'Inventario', path: '/InventoryCrud' },
-    { icon: History, label: 'Historial de inventario', path: '/History' },
+    { icon: History, label: 'Historial de inventario', path: '/InventoryHistory' },
     { icon: FileText, label: 'Reportes', path: '/reports' },
     { icon: Settings, label: 'Configuración', path: '/settings' }
   ];
@@ -201,16 +201,7 @@ const Dashboard = () => {
           ))}
         </nav>
 
-        <div className="sidebar-footer-dash">
-          <a href="#" className="nav-item" onClick={(e) => {
-            e.preventDefault();
-            // Implementa logout aquí
-            console.log('Logout');
-          }}>
-            <LogOut size={20} />
-            <span>Cerrar Sesión</span>
-          </a>
-        </div>
+       
       </div>
 
       {/* Overlay para móvil */}

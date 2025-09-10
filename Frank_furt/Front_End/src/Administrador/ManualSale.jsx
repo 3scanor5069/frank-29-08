@@ -27,7 +27,7 @@ const ManualSale = () => {
 
   const cargarProductos = async () => {
     try {
-      const response = await fetch('/api/productos');
+      const response = await fetch('/api/menu');
       const data = await response.json();
       setProductos(data);
     } catch (error) {
