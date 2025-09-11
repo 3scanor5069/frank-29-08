@@ -1,5 +1,5 @@
 // controllers/inventoryHistoryController.js
-const db = require('../config/database'); // Asume que tienes configurada la conexión a MySQL
+const db = require('../config/db'); // Asume que tienes configurada la conexión a MySQL
 
 const inventoryHistoryController = {
   // Obtener historial completo de movimientos de inventario

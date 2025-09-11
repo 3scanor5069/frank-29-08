@@ -1,4 +1,4 @@
-/* Header.css - Estilo Epic Games para Frank Furt */
+/* Header.css - Estilo Epic Games para Frank Furt - Refactorizado */
 
 /* Fuentes elegantes */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -8,11 +8,14 @@
   --gold-primary: #FFD700;
   --burgundy-primary: #800020;
   --burgundy-dark: #2b0f14;
+  --burgundy-secondary: #5d0015;
   --white-warm: #fff9e6;
   --shadow-soft: 0 2px 8px rgba(0,0,0,0.08);
   --shadow-dropdown: 0 8px 32px rgba(43, 15, 20, 0.3);
+  --shadow-button: 0 4px 12px rgba(128, 0, 32, 0.3);
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-fast: all 0.2s ease;
 }
 
 /* Header base styles */
@@ -30,8 +33,8 @@
 
 /* Contact bar ajustes */
 .contact-bar {
-  background: linear-gradient(135deg, var(--primary-burgundy) 0%, var(--secondary-burgundy) 100%);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--burgundy-primary) 0%, var(--burgundy-secondary) 100%);
+  color: white;
   padding: 8px 0;
   font-size: 13px;
 }
@@ -62,7 +65,8 @@
   flex-wrap: nowrap;
   transition: var(--transition-fast);
 }
-.contact-item span{
+
+.contact-item span {
   white-space: nowrap;
 }
 
@@ -71,7 +75,7 @@
 }
 
 .contact-icon {
-  color: var(--accent-gold);
+  color: var(--gold-primary);
   font-size: 12px;
 }
 
@@ -99,18 +103,17 @@
   height: 28px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  color: var(--white);
+  color: white;
   text-decoration: none;
   transition: var(--transition-fast);
   backdrop-filter: blur(10px);
 }
 
 .social-link:hover {
-  background: var(--accent-gold);
-  color: var(--primary-burgundy);
+  background: var(--gold-primary);
+  color: var(--burgundy-primary);
   transform: translateY(-2px);
 }
-
 
 /* Main navigation */
 .main-nav {
@@ -130,6 +133,17 @@
   flex: 0 0 auto;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-icon .icon {
+  color: var(--gold-primary);
+  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+}
+
 .brand-name {
   font-weight: 700;
   font-size: 1.5rem;
@@ -137,9 +151,23 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin: 0;
+}
+
+.brand-subtitle {
+  color: var(--burgundy-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 /* Navigation menu styles */
+.nav-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
 .nav-menu {
   display: flex;
   list-style: none;
@@ -163,12 +191,18 @@
   transition: var(--transition-smooth);
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .nav-link:hover {
   color: var(--burgundy-primary);
   background: rgba(255, 215, 0, 0.1);
   transform: translateY(-1px);
+}
+
+.nav-link:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
 }
 
 /* Active link with animated underline */
@@ -214,7 +248,8 @@
   z-index: 1000;
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -233,10 +268,20 @@
   transition: var(--transition-smooth);
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
   color: var(--gold-primary);
   background: rgba(255, 215, 0, 0.1);
-  transform: scale(1.05);
+  transform: scale(1.02);
+  outline: none;
+}
+
+/* Nav actions container */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 0 auto;
 }
 
 /* Cart button */
@@ -249,14 +294,18 @@
   color: var(--burgundy-primary);
   text-decoration: none;
   transition: var(--transition-smooth);
-  margin-right: 1rem;
 }
 
 .cart-btn:hover {
   background: var(--burgundy-primary);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+  box-shadow: var(--shadow-button);
+}
+
+.cart-btn:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
 }
 
 .cart-count {
@@ -271,6 +320,57 @@
   border-radius: 12px;
   min-width: 20px;
   text-align: center;
+}
+
+/* Botones de autenticación estilizados */
+.auth-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.auth-btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+  border: 2px solid transparent;
+  text-align: center;
+  min-width: 120px;
+  display: inline-block;
+}
+
+.auth-btn:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+.login-btn {
+  color: var(--burgundy-primary);
+  border-color: var(--burgundy-primary);
+  background: transparent;
+}
+
+.login-btn:hover {
+  background: var(--burgundy-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-button);
+}
+
+.register-btn {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, #ffed4e 100%);
+  color: var(--burgundy-primary);
+  border-color: var(--gold-primary);
+}
+
+.register-btn:hover {
+  background: linear-gradient(135deg, #ffed4e 0%, var(--gold-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
 }
 
 /* Epic Games inspired authenticated user section */
@@ -292,6 +392,11 @@
   transition: var(--transition-bounce);
   cursor: pointer;
   overflow: hidden;
+}
+
+.user-avatar-epic:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
 }
 
 /* Animación de aparición suave */
@@ -376,7 +481,7 @@
   box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
 }
 
-/* Menú desplegable Epic Games style */
+/* Menú desplegable Epic Games style - Mejorado para mejor UX */
 .user-epic-dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -392,9 +497,13 @@
   transition: var(--transition-smooth);
   z-index: 1000;
   border: 1px solid rgba(255, 215, 0, 0.2);
+  /* Área extendida para mejor hover */
+  padding-top: 10px;
+  margin-top: -10px;
 }
 
-.user-authenticated.epic-style:hover .user-epic-dropdown {
+.user-authenticated.epic-style:hover .user-epic-dropdown,
+.user-authenticated.epic-style.active .user-epic-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
@@ -404,6 +513,7 @@
 .dropdown-header {
   padding: 1.5rem;
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  margin-top: 10px; /* Compensar el padding-top */
 }
 
 .user-info {
@@ -453,10 +563,12 @@
   margin: 0 0.5rem;
 }
 
-.dropdown-items a:hover {
+.dropdown-items a:hover,
+.dropdown-items a:focus {
   color: var(--gold-primary);
   background: rgba(255, 215, 0, 0.1);
   transform: scale(1.02) translateX(4px);
+  outline: none;
 }
 
 /* Footer del dropdown */
@@ -467,7 +579,7 @@
 
 .logout-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--burgundy-primary) 0%, #5d0015 100%);
+  background: linear-gradient(135deg, var(--burgundy-primary) 0%, var(--burgundy-secondary) 100%);
   color: white;
   border: none;
   padding: 0.75rem;
@@ -475,15 +587,21 @@
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition-smooth);
+  font-family: 'Inter', sans-serif;
 }
 
 .logout-btn:hover {
-  background: linear-gradient(135deg, #5d0015 0%, var(--burgundy-primary) 100%);
+  background: linear-gradient(135deg, var(--burgundy-secondary) 0%, var(--burgundy-primary) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+  box-shadow: var(--shadow-button);
 }
 
-/* Mobile styles */
+.logout-btn:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+/* Mobile toggle - Solo visible en móviles */
 .mobile-toggle {
   background: none;
   border: 2px solid var(--burgundy-primary);
@@ -492,11 +610,17 @@
   border-radius: 8px;
   cursor: pointer;
   transition: var(--transition-smooth);
+  display: none; /* Oculto por defecto en desktop */
 }
 
 .mobile-toggle:hover {
   background: var(--burgundy-primary);
   color: white;
+}
+
+.mobile-toggle:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
 }
 
 /* Mobile overlay y menú */
@@ -528,6 +652,7 @@
   padding: 2rem;
   transform: translateX(100%);
   animation: slideIn 0.3s ease-out forwards;
+  overflow-y: auto;
 }
 
 @keyframes slideIn {
@@ -555,6 +680,11 @@
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.mobile-header button:hover {
+  color: var(--gold-primary);
 }
 
 .mobile-nav {
@@ -576,9 +706,11 @@
   transition: var(--transition-smooth);
 }
 
-.mobile-nav a:hover {
+.mobile-nav a:hover,
+.mobile-nav a:focus {
   color: var(--gold-primary);
   background: rgba(255, 215, 0, 0.1);
+  outline: none;
 }
 
 /* Mobile actions */
@@ -619,6 +751,35 @@
   transition: var(--transition-smooth);
   border: 2px solid transparent;
   font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.mobile-btn:focus {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+.mobile-btn.auth-btn {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-btn.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.mobile-btn.auth-btn.secondary {
+  background: var(--gold-primary);
+  color: var(--burgundy-primary);
+  border-color: var(--gold-primary);
+}
+
+.mobile-btn.auth-btn.secondary:hover {
+  background: #ffed4e;
+  transform: translateY(-1px);
 }
 
 .mobile-btn.logout-mobile {
@@ -629,7 +790,7 @@
 }
 
 .mobile-btn.logout-mobile:hover {
-  background: #5d0015;
+  background: var(--burgundy-secondary);
   transform: translateY(-1px);
 }
 
@@ -644,17 +805,37 @@
   transform: translateY(-1px);
 }
 
+/* Container base */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  /* Mostrar botón móvil */
+  .mobile-toggle {
+    display: block;
+  }
+  
+  /* Ocultar navegación principal */
   .nav-wrapper {
     display: none;
   }
   
+  /* Ajustar botones de auth en móvil */
+  .auth-buttons {
+    display: none;
+  }
+  
+  /* Ajustar dropdown de usuario */
   .user-epic-dropdown {
     right: -100px;
     min-width: 250px;
   }
   
+  /* Ajustar avatar */
   .user-avatar-epic {
     width: 42px;
     height: 42px;
@@ -663,38 +844,71 @@
   .avatar-content {
     font-size: 1rem;
   }
+  
+  /* Ajustar navegación */
+  .nav-actions {
+    gap: 0.5rem;
+  }
+  
+  /* Ajustar brand en móvil */
+  .brand-name {
+    font-size: 1.2rem;
+  }
+  
+  .brand-subtitle {
+    font-size: 0.8rem;
+  }
 }
 
-/* Container base */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .nav-content {
+    padding: 0.75rem 0;
+  }
+  
+  .mobile-menu {
+    width: 100%;
+    padding: 1.5rem;
+  }
+  
+  .user-epic-dropdown {
+    right: -150px;
+    min-width: 220px;
+  }
 }
 
-/* Nav actions container */
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-/* Logo container adjustments */
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .nav-link:focus,
+  .auth-btn:focus,
+  .mobile-toggle:focus,
+  .user-avatar-epic:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
 }
 
-.login-icon .icon {
-  color: var(--gold-primary);
-  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
-}
-
-/* Brand subtitle */
-.brand-subtitle {
-  color: var(--burgundy-primary);
-  font-weight: 500;
-  font-size: 0.9rem;
-  opacity: 0.8;
+/* Dark mode support (if needed in the future) */
+@media (prefers-color-scheme: dark) {
+  .header:not(.header-authenticated) {
+    background: #1a1a1a;
+  }
+  
+  .header:not(.header-authenticated) .nav-link {
+    color: #e0e0e0;
+  }
 }
