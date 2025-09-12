@@ -1,14 +1,40 @@
-// En la carpeta controllers
-const inventoryService = require('../services/inventoryService');
+// controllers/inventoryController.js
+const pool = require('../config/db');
 
 exports.getAllInventoryItems = async (req, res) => {
- try {
-  const items = await inventoryService.getAllInventoryItems();
-  res.json(items);
- } catch (error) {
-  console.error('Error en el controlador (getAllInventoryItems):', error);
-  res.status(500).json({ error: 'Error del servidor al obtener el inventario.' });
- }
+    // Esta consulta SQL une las tablas para obtener toda la información
+    const sql = `
+        SELECT
+            p.idProducto, 
+            p.nombre as nombreProducto, 
+            p.descripcion as descripcionProducto, 
+            c.nombre as categoria,
+            p.precio as precioUnitario,
+            p.disponible as estado,
+            p.imagen_url as imagen,
+            i.stockDisponible as stock,
+            i.stock_minimo as stock_minimo,
+            i.stock_maximo as stock_maximo
+        FROM 
+            producto p
+        JOIN 
+            categoria c ON p.idCategoria = c.id
+        LEFT JOIN 
+            inventario i ON p.idProducto = i.idProducto
+        ORDER BY
+            p.nombre ASC
+    `;
+
+    try {
+        const [items] = await pool.query(sql);
+        res.json(items);
+    } catch (error) {
+        console.error('Error en el controlador (getAllInventoryItems):', error);
+        res.status(500).json({ 
+            error: 'Error del servidor al obtener el inventario.',
+            details: error.message
+        });
+    }
 };
 
 exports.createInventoryItem = async (req, res) => {

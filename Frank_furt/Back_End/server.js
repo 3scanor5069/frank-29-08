@@ -9,6 +9,7 @@ const menuRoutes = require('./routes/menuRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const inventoryHistoryRoutes = require('./routes/inventoryHistoryRoutes');
+const ventaRoutes = require('./routes/ventaRoutes');
 
 
 
@@ -27,7 +28,8 @@ app.use('/api', passwordRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/inventario', inventoryHistoryRoutes);
+app.use('/api/inventoryHistory', inventoryHistoryRoutes);
+app.use('/api/manualSale', ventaRoutes);
 
 
 

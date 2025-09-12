@@ -76,33 +76,23 @@ const ManualSale = () => {
   };
 
   const confirmarPedido = async () => {
-    if (!mesaSeleccionada) {
-      setMensaje('Por favor selecciona una mesa');
-      return;
-    }
+  // ...
+  try {
+    const pedidoData = {
+      idMesa: parseInt(mesaSeleccionada),
+      productos: carrito.map(item => ({
+        idProducto: item.idProducto,
+        cantidad: item.cantidad
+      }))
+    };
 
-    if (carrito.length === 0) {
-      setMensaje('El carrito está vacío');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const pedidoData = {
-        idMesa: parseInt(mesaSeleccionada),
-        productos: carrito.map(item => ({
-          idProducto: item.idProducto,
-          cantidad: item.cantidad
-        }))
-      };
-
-      const response = await fetch('/api/ventas/manual', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(pedidoData)
-      });
+    const response = await fetch('/api/manualSale/manual', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pedidoData)
+    });
 
       const result = await response.json();
 

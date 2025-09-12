@@ -63,7 +63,7 @@ const InventoryCrud = () => {
   const fetchInventory = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/inventory");
+      const res = await fetch("/api/inventory");
       const data = await res.json();
       const updated = data.map((item) => ({
         ...item,
@@ -85,7 +85,7 @@ const InventoryCrud = () => {
     try {
       if (editingItem) {
         // actualizar
-        await fetch(`http://localhost:3001/api/inventory/${editingItem.idInventario}`, {
+        await fetch(`/api/inventory/${editingItem.idInventario}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),

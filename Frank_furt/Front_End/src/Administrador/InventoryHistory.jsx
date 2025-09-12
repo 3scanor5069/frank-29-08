@@ -19,7 +19,7 @@ const InventoryHistory = () => {
       setLoading(true);
       setError('');
       
-      const response = await fetch('/api/inventoryHystory');
+      const response = await fetch('/api/inventoryHistory');
       
       if (!response.ok) {
         throw new Error('Error al cargar el historial');

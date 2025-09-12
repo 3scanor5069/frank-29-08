@@ -80,62 +80,51 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  const newErrors = validateForm();
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setIsLoading(true);
+  setErrors({});
+
+  try {
+    // Combinar nombre y apellido para el campo 'nombre' del backend
+    const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
     
-    // Validar formulario
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+    // El 'body' debe coincidir con los nombres que espera el backend
+    const response = await fetch('http://localhost:3006/api/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nombre: nombreCompleto, // Mapea 'firstName' + 'lastName' a 'nombre'
+        correo: formData.email.trim().toLowerCase(), // Mapea 'email' a 'correo'
+        password: formData.password
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) { // Verifica si la respuesta HTTP es exitosa (código 200-299)
+      alert(data.message);
+      // Puedes redirigir usando navigate en lugar de window.location.href
+      // useNavigate() from react-router-dom
+      // navigate('/login'); 
+    } else {
+      setErrors({ api: data.message || 'Error en el registro' });
     }
-
-    setIsLoading(true);
-    setErrors({});
-
-    try {
-      
-
-      const response = await fetch('http://localhost:3006/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          email: formData.email.trim().toLowerCase(),
-          phone: formData.phone.trim() || null,
-          address: formData.address.trim() || null,
-          password: formData.password
-        })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Guardar token en localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.data));
-        
-        alert('¡Registro exitoso! Bienvenido a Frank Furt');
-        
-        // Redirigir al dashboard o página principal
-        window.location.href = '/p';
-      } else {
-        // Mostrar error del servidor
-        if (data.message.includes('email')) {
-          setErrors({ email: data.message });
-        } else {
-          alert(data.message || 'Error en el registro');
-        }
-      }
-    } catch (error) {
-      console.error('Error en el registro:', error);
-      alert('Error de conexión. Por favor, intenta nuevamente.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error('Error en el registro:', error);
+    setErrors({ api: 'Error de conexión. Por favor, intenta nuevamente.' });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleSwitchToLogin = () => {
     window.location.href = '/login';
