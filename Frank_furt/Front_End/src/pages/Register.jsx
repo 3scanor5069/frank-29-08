@@ -11,7 +11,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    correo: '',
     phone: '',
     address: '',
     password: '',
@@ -32,12 +32,12 @@ const Register = () => {
       newErrors.lastName = 'El apellido es requerido';
     }
 
-    // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = 'El email es requerido';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'El formato del email no es válido';
+    // Validar correo
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.correo) {
+      newErrors.correo = 'El correo es requerido';
+    } else if (!correoRegex.test(formData.correo)) {
+      newErrors.correo = 'El formato del correo no es válido';
     }
 
     // Validar teléfono (opcional pero si se proporciona debe ser válido)
@@ -80,50 +80,51 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+ e.preventDefault();
+ 
+ const newErrors = validateForm();
+ if (Object.keys(newErrors).length > 0) {
+  setErrors(newErrors);
+  return;
+ }
+
+ setIsLoading(true);
+ setErrors({});
+
+ try {
+  const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
   
-  const newErrors = validateForm();
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
+  const response = await fetch('http://localhost:3006/api/users/register', {
+   method: 'POST',
+   headers: {
+    'Content-Type': 'application/json',
+   },
+   body: JSON.stringify({
+    nombre: nombreCompleto,
+    correo: formData.correo.trim().toLowerCase(), // ¡Cambiado a 'correo'!
+    password: formData.password
+   })
+  });
 
-  setIsLoading(true);
-  setErrors({});
+ const data = await response.json();
 
-  try {
-    // Combinar nombre y apellido para el campo 'nombre' del backend
-    const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
-    
-    // El 'body' debe coincidir con los nombres que espera el backend
-    const response = await fetch('http://localhost:3006/api/users/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        nombre: nombreCompleto, // Mapea 'firstName' + 'lastName' a 'nombre'
-        correo: formData.email.trim().toLowerCase(), // Mapea 'email' a 'correo'
-        password: formData.password
-      })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) { // Verifica si la respuesta HTTP es exitosa (código 200-299)
-      alert(data.message);
-      // Puedes redirigir usando navigate en lugar de window.location.href
-      // useNavigate() from react-router-dom
-      // navigate('/login'); 
+    if (response.ok) { // Confiar en el código de estado HTTP
+        alert('¡Registro exitoso! Bienvenido a Frank Furt');
+        window.location.href = '/login'; // Redirigir al login
     } else {
-      setErrors({ api: data.message || 'Error en el registro' });
+        // Manejo de errores específicos del backend
+        if (response.status === 409) {
+            setErrors({ correo: 'El correo ya está registrado.' });
+        } else {
+            setErrors({ api: data.message || 'Error en el registro.' });
+        }
     }
-  } catch (error) {
-    console.error('Error en el registro:', error);
-    setErrors({ api: 'Error de conexión. Por favor, intenta nuevamente.' });
-  } finally {
-    setIsLoading(false);
-  }
+ } catch (error) {
+  console.error('Error en el registro:', error);
+  setErrors({ api: 'Error de conexión. Por favor, intenta nuevamente.' });
+ } finally {
+  setIsLoading(false);
+ }
 };
 
   const handleSwitchToLogin = () => {
@@ -179,16 +180,16 @@ const Register = () => {
               <Mail className="icon-small" />
             </div>
             <input
-              type="email"
-              name="email"
+              type="correo"
+              name="correo"
               placeholder="Correo electrónico"
-              value={formData.email}
+              value={formData.correo}
               onChange={handleInputChange}
-              className={`register-input ${errors.email ? 'error' : ''}`}
+              className={`register-input ${errors.correo ? 'error' : ''}`}
               disabled={isLoading}
               required
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {errors.correo && <span className="error-message">{errors.correo}</span>}
           </div>
 
           <div className="input-group-register">

@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    email: '',
+    correo: '',
     password: ''
   });
 
@@ -63,8 +63,8 @@ const Login = () => {
   };
 
   const validateForm = () => {
-    if (!formData.email.trim()) {
-      setError('El email es requerido');
+    if (!formData.correo.trim()) {
+      setError('El correo es requerido');
       return false;
     }
     
@@ -73,10 +73,10 @@ const Login = () => {
       return false;
     }
 
-    // Validar formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Por favor ingresa un email válido');
+    // Validar formato de correo
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!correoRegex.test(formData.correo)) {
+      setError('Por favor ingresa un correo válido');
       return false;
     }
 
@@ -90,77 +90,45 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+ e.preventDefault();
+ 
+ if (!validateForm()) return;
 
-    setLoading(true);
-    setError('');
-    setSuccess('');
+ setLoading(true);
+ setError('');
+ setSuccess('');
 
-    try {
-      // Configurado para puerto 3006
-        const response = await fetch('http://localhost:3006/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email.trim().toLowerCase(),
-          password: formData.password
-        })
-      });
+ try {
+  const response = await fetch('http://localhost:3006/api/users/login', {
+   method: 'POST',
+   headers: {
+    'Content-Type': 'application/json',
+   },
+    body: JSON.stringify({
+    correo: formData.correo.trim().toLowerCase(),
+    password: formData.password
+   })
+  });
 
-      const data = await response.json();
+  const data = await response.json();
 
-      if (response.ok) {
-        // Login exitoso
-        setSuccess('¡Login exitoso! Redirigiendo...');
-        
-        // Guardar token y datos del usuario en localStorage
-        if (data.token) {
-          localStorage.setItem('authToken', data.token);
-        }
-        
-        if (data.user) {
-          localStorage.setItem('userData', JSON.stringify(data.user));
-        }
-        
-        // Limpiar formulario
-        setFormData({ email: '', password: '' });
-        
-        // Redirigir después de un breve delay
-        setTimeout(() => {
-          navigate('/p'); // o la ruta que prefieras para usuarios logueados
-        }, 1500);
-        
-      } else {
-        // Error en login - manejar diferentes tipos de errores
-        if (response.status === 401) {
-          setError('Email o contraseña incorrectos');
-        } else if (response.status === 404) {
-          setError('Usuario no encontrado');
-        } else if (response.status >= 500) {
-          setError('Error del servidor. Intenta más tarde');
-        } else {
-          setError(data.message || 'Error al iniciar sesión');
-        }
-      }
+  if (response.ok) { // Login exitoso
+   setSuccess('¡Login exitoso! Redirigiendo...');
+   localStorage.setItem('userData', JSON.stringify(data.user));
+   setTimeout(() => {
+    navigate('/p');
+   }, 1500);
+  } else {
+   setError(data.message || 'Error al iniciar sesión');
+  }
 
-    } catch (error) {
-      console.error('Error en login:', error);
-      
-      // Manejar diferentes tipos de errores de red
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        setError('No se puede conectar al servidor. Verifica tu conexión.');
-      } else {
-        setError('Error de conexión. Verifica que el servidor esté funcionando.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
+ } catch (error) {
+  console.error('Error en login:', error);
+  setError('Error de conexión. Verifica que el servidor esté funcionando.');
+ } finally {
+  setLoading(false);
+ }
+};
   const handleSwitchToRegister = () => {
     navigate('/Register'); // Ruta hacia la página de registro
   };
@@ -219,15 +187,15 @@ const Login = () => {
               <Mail className="icon-small" />
             </div>
             <input
-              type="email"
-              name="email"
+              type="correo"
+              name="correo"
               placeholder="Correo electrónico"
-              value={formData.email}
+              value={formData.correo}
               onChange={handleInputChange}
               className="login-input"
               required
               disabled={loading}
-              autoComplete="email"
+              autoComplete="correo"
               aria-label="Correo electrónico"
             />
           </div>
@@ -279,7 +247,7 @@ const Login = () => {
           <button 
             type="submit" 
             className="login-button"
-            disabled={loading || !formData.email.trim() || !formData.password.trim()}
+            disabled={loading || !formData.correo.trim() || !formData.password.trim()}
           >
             {loading ? (
               <div className="loading-container">

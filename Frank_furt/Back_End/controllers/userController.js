@@ -115,39 +115,22 @@ exports.updateUser = async (req, res) => {
 };
 
 // Eliminar un usuario
-exports.deleteUser = async (req, res) => {  const { id } = req.params;
- try {
-  const sql = `DELETE FROM cliente WHERE idCliente = ?`;
-  const [result] = await pool.query(sql, [id]);
-
-  if (result.affectedRows === 0) {
-   return res.status(404).json({ message: 'Usuario no encontrado' });
-  }
-  res.status(200).json({ message: 'Usuario eliminado correctamente' });
- } catch (error) {
-  console.error('Error al eliminar el usuario:', error);
-  res.status(500).json({ message: 'Error al eliminar el usuario', error: error.message });
- }
-};
-
-// Función para el registro de usuarios
 exports.registerUser = async (req, res) => {
-  const { nombre, email, password } = req.body; // Cambiado de 'correo' a 'email'
-  
-  if (!nombre || !email || !password) {
+  const { nombre, correo, password } = req.body;
+
+  if (!nombre || !correo || !password) {
     return res.status(400).json({ message: 'Faltan campos obligatorios' });
   }
 
   try {
-    // Verificar si el usuario ya existe
-    const [existingUser] = await pool.query('SELECT correo FROM cliente WHERE correo = ?', [email]);
+    const [existingUser] = await pool.query('SELECT correo FROM cliente WHERE correo = ?', [correo]);
     if (existingUser.length > 0) {
-        return res.status(409).json({ message: 'El correo ya está registrado.' });
+      return res.status(409).json({ message: 'El correo ya está registrado.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const sql = `INSERT INTO cliente (nombre, correo, password) VALUES (?, ?, ?)`;
-    await pool.query(sql, [nombre, email, hashedPassword]); // Cambiado de 'correo' a 'email'
+    await pool.query(sql, [nombre, correo, hashedPassword]);
 
     res.status(201).json({ message: 'Usuario registrado con éxito' });
   } catch (error) {
@@ -158,30 +141,39 @@ exports.registerUser = async (req, res) => {
 
 // Función para el inicio de sesión
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body; // Cambiado de 'correo' a 'email'
-  
-  if (!email || !password) {
-      return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
-  }
-
-  try {
-    const [rows] = await pool.query('SELECT * FROM cliente WHERE correo = ?', [email]); // Cambiado de 'correo' a 'email'
-    const user = rows[0];
+    const { email, password } = req.body;
     
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-    
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    
-    if (!passwordMatch) {
-      return res.status(401).json({ message: 'Contraseña incorrecta' });
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
     }
 
-    // Aquí deberías generar un token JWT para una seguridad adecuada
-    res.status(200).json({ message: 'Inicio de sesión exitoso', user: { id: user.idCliente, nombre: user.nombre, correo: user.correo } });
-  } catch (error) {
-    console.error('Error en el inicio de sesión:', error);
-    res.status(500).json({ message: 'Error del servidor al iniciar sesión', error: error.message });
-  }
+    try {
+        const [rows] = await pool.query('SELECT * FROM cliente WHERE correo = ?', [email]);
+        const user = rows[0];
+        
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Contraseña incorrecta' });
+        }
+
+        // Simulación de JWT para un login exitoso
+        // Por ahora, solo devuelve un mensaje de éxito y los datos del usuario
+        res.status(200).json({ 
+            success: true, 
+            message: 'Inicio de sesión exitoso', 
+            user: { 
+                id: user.idCliente, 
+                nombre: user.nombre, 
+                correo: user.correo 
+            }
+        });
+    } catch (error) {
+        console.error('Error en el inicio de sesión:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor al iniciar sesión', error: error.message });
+    }
 };
