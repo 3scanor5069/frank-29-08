@@ -28,7 +28,7 @@ exports.getAllUsers = async (req, res) => {
     id: row.idCliente,
     firstName: firstName,
     lastName: lastName,
-    email: row.correo,
+    correo: row.correo,
     phone: row.telefono,
     location: row.direccion,
     hobby: 'N/A',
@@ -46,7 +46,7 @@ exports.getAllUsers = async (req, res) => {
 
 // Crear un nuevo usuario
 exports.createUser = async (req, res) => {
- const { firstName, lastName, email, phone, location, status } = req.body;
+ const { firstName, lastName, correo, phone, location, status } = req.body;
  const nombreCompleto = `${firstName} ${lastName}`.trim();
  const activo = status === 'active' ? 1 : 0;
  const password = 'default_password_hashed'; 
@@ -56,13 +56,13 @@ exports.createUser = async (req, res) => {
    INSERT INTO cliente (nombre, correo, telefono, direccion, activo, password)
    VALUES (?, ?, ?, ?, ?, ?)
   `;
-  const [result] = await pool.query(sql, [nombreCompleto, email, phone, location, activo, password]);
+  const [result] = await pool.query(sql, [nombreCompleto, correo, phone, location, activo, password]);
 
   const newUser = {
    id: result.insertId,
    firstName,
    lastName,
-   email,
+   correo,
    phone,
    location,
    hobby: 'N/A',
@@ -80,7 +80,7 @@ exports.createUser = async (req, res) => {
 // Actualizar un usuario existente
 exports.updateUser = async (req, res) => {
  const { id } = req.params;
- const { firstName, lastName, email, phone, location, status } = req.body;
+ const { firstName, lastName, correo, phone, location, status } = req.body;
  const nombreCompleto = `${firstName} ${lastName}`.trim();
  const activo = status === 'active' ? 1 : 0;
 
@@ -90,7 +90,7 @@ exports.updateUser = async (req, res) => {
    SET nombre = ?, correo = ?, telefono = ?, direccion = ?, activo = ?
    WHERE idCliente = ?
   `;
- const [result] = await pool.query(sql, [nombreCompleto, email, phone, location, activo, id]);
+ const [result] = await pool.query(sql, [nombreCompleto, correo, phone, location, activo, id]);
 
   if (result.affectedRows === 0) {
    return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -100,7 +100,7 @@ exports.updateUser = async (req, res) => {
    id: parseInt(id),
    firstName,
    lastName,
-   email,
+   correo,
    phone,
    location,
    hobby: 'N/A',
@@ -115,6 +115,25 @@ exports.updateUser = async (req, res) => {
 };
 
 // Eliminar un usuario
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const sql = 'DELETE FROM cliente WHERE idCliente = ?';
+    const [result] = await pool.query(sql, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+    res.status(500).json({ message: 'Error al eliminar el usuario', error: error.message });
+  }
+};
+
+// registrar un usuario
 exports.registerUser = async (req, res) => {
   const { nombre, correo, password } = req.body;
 
@@ -141,14 +160,15 @@ exports.registerUser = async (req, res) => {
 
 // Función para el inicio de sesión
 exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { correo, password } = req.body;
+    console.log(correo, password);
     
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email y contraseña son obligatorios' });
+    if (!correo || !password) {
+        return res.status(400).json({ message: 'correo y contraseña son obligatorios' });
     }
 
     try {
-        const [rows] = await pool.query('SELECT * FROM cliente WHERE correo = ?', [email]);
+        const [rows] = await pool.query('SELECT * FROM cliente WHERE correo = ?', [correo]);
         const user = rows[0];
         
         if (!user) {

@@ -99,16 +99,18 @@ const Login = () => {
  setSuccess('');
 
  try {
-  const response = await fetch('http://localhost:3006/api/users/login', {
-   method: 'POST',
-   headers: {
+ const response = await fetch('http://localhost:3006/api/users/login', {
+  method: 'POST',
+  headers: {
     'Content-Type': 'application/json',
-   },
-    body: JSON.stringify({
-    correo: formData.correo.trim().toLowerCase(),
+  },
+  body: JSON.stringify({
+    correo: formData.correo.trim().toLowerCase(), 
     password: formData.password
-   })
+  })
   });
+
+  console.log(formData.correo.trim().toLowerCase(), formData.password);
 
   const data = await response.json();
 

@@ -1,56 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Edit, Trash2, Eye, Filter, Download } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, Filter, Download } from 'lucide-react';
 import './MenuCrud.css';
 
 const MenuCrud = () => {
-  const [menuItems, setMenuItems] = useState([
-    {
-      id: 1,
-      name: 'Frank Clásico',
-      category: 'Principales',
-      price: 12500,
-      description: 'Salchicha premium con cebolla caramelizada y mostaza especial',
-      status: 'Activo',
-      image: '/api/placeholder/100/80'
-    },
-    {
-      id: 2,
-      name: 'Frank Supremo',
-      category: 'Principales',
-      price: 15000,
-      description: 'Salchicha artesanal con queso cheddar, bacon y salsa BBQ',
-      status: 'Activo',
-      image: '/api/placeholder/100/80'
-    },
-    {
-      id: 3,
-      name: 'Papas Deluxe',
-      category: 'Acompañamientos',
-      price: 8500,
-      description: 'Papas crujientes con queso derretido y cebollín',
-      status: 'Activo',
-      image: '/api/placeholder/100/80'
-    },
-    {
-      id: 4,
-      name: 'Frank Veggie',
-      category: 'Principales',
-      price: 13000,
-      description: 'Salchicha vegetal con aguacate y vegetales frescos',
-      status: 'Inactivo',
-      image: '/api/placeholder/100/80'
-    },
-    {
-      id: 5,
-      name: 'Refresco Cola',
-      category: 'Bebidas',
-      price: 4500,
-      description: 'Bebida refrescante 350ml',
-      status: 'Activo',
-      image: '/api/placeholder/100/80'
-    }
-  ]);
-
+  const [menuItems, setMenuItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [showModal, setShowModal] = useState(false);
@@ -60,10 +13,19 @@ const MenuCrud = () => {
     category: 'Principales',
     price: '',
     description: '',
-    status: 'Activo'
+    status: 'Activo',
+    image: ''
   });
 
   const categories = ['Todos', 'Principales', 'Acompañamientos', 'Bebidas', 'Postres'];
+
+  // 🔹 Obtener productos del backend
+  useEffect(() => {
+    fetch("http://localhost:3006/api/menu")
+      .then(res => res.json())
+      .then(data => setMenuItems(data))
+      .catch(err => console.error('Error al cargar menú:', err));
+  }, []);
 
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,26 +34,34 @@ const MenuCrud = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const handleSubmit = (e) => {
+  // 🔹 Crear / Actualizar producto
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingItem) {
-      setMenuItems(prev => prev.map(item => 
-        item.id === editingItem.id 
-          ? { ...item, ...formData, price: parseInt(formData.price) }
-          : item
-      ));
-    } else {
-      const newItem = {
-        id: Date.now(),
-        ...formData,
-        price: parseInt(formData.price),
-        image: '/api/placeholder/100/80'
-      };
-      setMenuItems(prev => [...prev, newItem]);
+    try {
+      if (editingItem) {
+        await fetch(`http://localhost:3006/api/menu/:id`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      } else {
+        await fetch('http://localhost:3006/api/menu', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      }
+      // Recargar productos
+      const res = await fetch('http://localhost:3006/api/menu');
+      const data = await res.json();
+      setMenuItems(data);
+      handleCloseModal();
+    } catch (err) {
+      console.error('Error al guardar producto:', err);
     }
-    handleCloseModal();
   };
 
+  // 🔹 Editar producto
   const handleEdit = (item) => {
     setEditingItem(item);
     setFormData({
@@ -99,14 +69,21 @@ const MenuCrud = () => {
       category: item.category,
       price: item.price.toString(),
       description: item.description,
-      status: item.status
+      status: item.status,
+      image: item.image || ''
     });
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
+  // 🔹 Eliminar producto
+  const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar este elemento?')) {
-      setMenuItems(prev => prev.filter(item => item.id !== id));
+      try {
+        await fetch(`http://localhost:3006/api/menu/:id`, { method: 'DELETE' });
+        setMenuItems(prev => prev.filter(item => item.id !== id));
+      } catch (err) {
+        console.error('Error al eliminar producto:', err);
+      }
     }
   };
 
@@ -118,10 +95,12 @@ const MenuCrud = () => {
       category: 'Principales',
       price: '',
       description: '',
-      status: 'Activo'
+      status: 'Activo',
+      image: ''
     });
   };
 
+  // 🔹 Exportar CSV
   const handleExport = () => {
     const csvContent = [
       ['ID', 'Nombre', 'Categoría', 'Precio', 'Descripción', 'Estado'],
@@ -206,7 +185,7 @@ const MenuCrud = () => {
                 <td>{item.id}</td>
                 <td>
                   <div className="product-info">
-                    <img src={item.image} alt={item.name} className="product-image" />
+                    <img src={item.image || '/api/placeholder/100/80'} alt={item.name} className="product-image" />
                     <div>
                       <div className="product-name">{item.name}</div>
                       <div className="product-description">{item.description}</div>
@@ -298,6 +277,15 @@ const MenuCrud = () => {
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
+              </div>
+              <div className="form-group">
+                <label>Imagen (URL)</label>
+                <input
+                  type="text"
+                  value={formData.image}
+                  onChange={(e) => setFormData({...formData, image: e.target.value})}
+                  placeholder="https://..."
+                />
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={handleCloseModal}>

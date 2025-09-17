@@ -1,23 +1,22 @@
 // controllers/menuController.js
 const pool = require('../config/db');
 
-// Obtener todos los productos del menú (GET /api/menu)
+// Obtener todos los productos del menú
 exports.getAllMenuItems = async (req, res) => {
   const sql = `
     SELECT
       p.idProducto, 
-      p.nombre as nombreProducto, 
-      p.descripcion as descripcionProducto, 
-      c.nombre as categoria,
-      p.precio as precio,
-      p.disponible as activo,
-      p.imagen_url as imagen
-    FROM 
-      producto p
-    JOIN 
-      categoria c ON p.idCategoria = c.id
-    ORDER BY
-      p.nombre ASC
+      p.nombre AS nombreProducto, 
+      p.descripcion AS descripcionProducto, 
+      p.precio,
+      p.disponible,
+      p.imagen_url,
+      c.nombre AS categoria,
+      m.nombre AS menu
+    FROM producto p
+    JOIN categoria c ON p.idCategoria = c.id
+    JOIN menu m ON p.idMenu = m.idMenu
+    ORDER BY p.nombre ASC
   `;
 
   try {
@@ -27,9 +26,10 @@ exports.getAllMenuItems = async (req, res) => {
       name: item.nombreProducto,
       description: item.descripcionProducto,
       price: item.precio,
-      status: item.activo === 1 ? 'Activo' : 'Inactivo',
+      status: item.disponible === 1 ? 'Activo' : 'Inactivo',
       category: item.categoria,
-      image: item.imagen || null
+      menu: item.menu,
+      image: item.imagen_url || null
     }));
     res.json(menuItems);
   } catch (err) {
@@ -38,46 +38,50 @@ exports.getAllMenuItems = async (req, res) => {
   }
 };
 
-// Crear un nuevo producto (POST /api/menu)
+// Crear un nuevo producto
 exports.createMenuItem = async (req, res) => {
-  const { name, description, category, price, status, image } = req.body;
+  const { name, description, category, menu, price, status, image } = req.body;
   const activo = status === 'Activo' ? 1 : 0;
-  
+
   try {
-    // Primero, encuentra el ID de la categoría por su nombre
     const [categoryResult] = await pool.query('SELECT id FROM categoria WHERE nombre = ?', [category]);
     if (categoryResult.length === 0) {
       return res.status(404).json({ error: 'Categoría no encontrada.' });
     }
     const idCategoria = categoryResult[0].id;
 
-    // Luego, inserta el nuevo producto en la tabla 'producto'
+    const [menuResult] = await pool.query('SELECT idMenu FROM menu WHERE nombre = ?', [menu]);
+    if (menuResult.length === 0) {
+      return res.status(404).json({ error: 'Menú no encontrado.' });
+    }
+    const idMenu = menuResult[0].idMenu;
+
     const insertSql = `
-      INSERT INTO producto (nombre, descripcion, precio, idCategoria, disponible, imagen_url)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO producto (nombre, descripcion, precio, idCategoria, idMenu, disponible, imagen_url)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    const [result] = await pool.query(insertSql, [name, description, price, idCategoria, activo, image]);
-    
-    const newMenuItem = {
+    const [result] = await pool.query(insertSql, [name, description, price, idCategoria, idMenu, activo, image]);
+
+    res.status(201).json({
       id: result.insertId,
       name,
       description,
       category,
+      menu,
       price,
       status,
       image
-    };
-    res.status(201).json(newMenuItem);
+    });
   } catch (err) {
     console.error('Error al crear el producto:', err);
     res.status(500).json({ error: 'Error interno del servidor', details: err.message });
   }
 };
 
-// Actualizar un producto (PUT /api/menu/:id)
+// Actualizar un producto
 exports.updateMenuItem = async (req, res) => {
   const { id } = req.params;
-  const { name, description, category, price, status, image } = req.body;
+  const { name, description, category, menu, price, status, image } = req.body;
   const activo = status === 'Activo' ? 1 : 0;
 
   try {
@@ -87,13 +91,19 @@ exports.updateMenuItem = async (req, res) => {
     }
     const idCategoria = categoryResult[0].id;
 
+    const [menuResult] = await pool.query('SELECT idMenu FROM menu WHERE nombre = ?', [menu]);
+    if (menuResult.length === 0) {
+      return res.status(404).json({ error: 'Menú no encontrado.' });
+    }
+    const idMenu = menuResult[0].idMenu;
+
     const updateSql = `
       UPDATE producto 
-      SET nombre = ?, descripcion = ?, precio = ?, idCategoria = ?, disponible = ?, imagen_url = ?
+      SET nombre = ?, descripcion = ?, precio = ?, idCategoria = ?, idMenu = ?, disponible = ?, imagen_url = ?
       WHERE idProducto = ?
     `;
-    const [result] = await pool.query(updateSql, [name, description, price, idCategoria, activo, image, id]);
-    
+    const [result] = await pool.query(updateSql, [name, description, price, idCategoria, idMenu, activo, image, id]);
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Producto no encontrado' });
     }
@@ -104,7 +114,7 @@ exports.updateMenuItem = async (req, res) => {
   }
 };
 
-// Eliminar un producto (DELETE /api/menu/:id)
+// Eliminar un producto
 exports.deleteMenuItem = async (req, res) => {
   const { id } = req.params;
   const sql = `DELETE FROM producto WHERE idProducto = ?`;
